@@ -4,6 +4,8 @@ import styles from './SearchOptions.module.css';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+import { useDebounce } from '../../lib/useDebounce';
+import { searchApi } from '../../lib/searchApi';
 
 export default function SearchOptions({
   initialDestination = '',
@@ -21,21 +23,12 @@ export default function SearchOptions({
   const [datesError, setDatesError] = useState('');
   const [guestsError, setGuestsError] = useState('');
 
-  // Static data for suggestions and popular searches
-  const suggestions = [
-    { name: 'Taj Lands End', desc: 'City | Mumbai, Maharashtra, India' },
-    { name: 'The Taj mahal Place Mumbai', desc: 'City | Mumbai, Maharashtra, India' },
-    { name: 'Mumbai (BOM - Chhatrapati... ', desc: 'City | India', icon: 'plane' },
-    { name: 'Taj Santacruz', desc: 'City | Mumbai, Maharashtra, India' },
-    { name: 'Taj Mahal Tower, Mumbai', desc: 'City | Mumbai, Maharashtra, India' },
-  ];
-  const popularOptions = [
-    { name: 'Hotels', icon: '/images/hotellogo.svg' },
-    { name: 'Resorts', icon: '/images/Pool Icon.svg' },
-    { name: 'Villas', icon: '/images/bed.svg' },
-    { name: 'Apartments', icon: '/images/area.svg' },
-    { name: 'Hostels', icon: '/images/user.svg' },
-  ];
+  // Auto-suggest states
+  const [apiSuggestions, setApiSuggestions] = useState([]);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+  const debouncedSearchTerm = useDebounce(destinationInput, 500); // 500ms debounce
+
+  // Static data for popular searches (keeping this for fallback)
   const popularSearches = ['Delhi', 'Mumbai', 'Bengaluru', 'Goa', 'Chennai'];
 
   // Add these states at the top of your component
@@ -130,6 +123,30 @@ export default function SearchOptions({
     return summary;
   };
 
+  // Auto-suggest API call with debouncing
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (debouncedSearchTerm.trim().length >= 3) {
+        setIsLoadingSuggestions(true);
+        try {
+          const results = await searchApi.getAutoSuggest(debouncedSearchTerm);
+          const formattedSuggestions = results.map(searchApi.formatSuggestion).filter(Boolean);
+          setApiSuggestions(formattedSuggestions);
+        } catch (error) {
+          console.error('Error fetching suggestions:', error);
+          setApiSuggestions([]);
+        } finally {
+          setIsLoadingSuggestions(false);
+        }
+      } else {
+        setApiSuggestions([]);
+        setIsLoadingSuggestions(false);
+      }
+    };
+
+    fetchSuggestions();
+  }, [debouncedSearchTerm]);
+
   // Close card when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
@@ -147,14 +164,10 @@ export default function SearchOptions({
     };
   }, [openCard]);
 
-  // Filter suggestions based on input
-  const filteredSuggestions = destinationInput
-    ? suggestions.filter(s => s.name.toLowerCase().includes(destinationInput.toLowerCase()))
-    : suggestions;
-
   // Handle selecting a suggestion or popular search
   const handleSelectDestination = (name) => {
     setDestinationInput(name);
+    setDestinationError('');
     setOpenCard(null);
   };
 
@@ -208,19 +221,64 @@ export default function SearchOptions({
               <Image src="/images/search1.svg" alt="search" width={32} height={32} />
               <div>Look up destinations, places to stay, or landmarks</div>
             </div>
-            {/* Removed Popular options section */}
+            
+            {/* API Suggestions */}
             <div>
-              {filteredSuggestions.length > 0 && destinationInput && (
+              {destinationInput.trim().length >= 3 && (
                 <div>
-                  {filteredSuggestions.map((s, i) => (
-                    <div key={i} style={{display: 'flex', alignItems: 'center', padding: '8px 0', cursor: 'pointer'}} onClick={() => handleSelectDestination(s.name)}>
-                      <Image src={s.icon === 'plane' ? '/images/airport.svg' : '/images/hotellogo.svg'} alt="icon" width={36} height={36} style={{marginRight: 8}} />
-                      <div>
-                        <div style={{fontWeight: 700,color: '#000'}}>{s.name}</div>
-                        <div style={{fontSize: 12, color: '#888'}}>{s.desc}</div>
-                      </div>
+                  {isLoadingSuggestions && (
+                    <div style={{padding: '8px 0', textAlign: 'center', color: '#888', fontSize: 14}}>
+                      Searching...
                     </div>
-                  ))}
+                  )}
+                  
+                  {!isLoadingSuggestions && apiSuggestions.length > 0 && (
+                    <div>
+                      <div style={{fontWeight: 500, marginBottom: 8, color: '#000', fontSize: 14}}>Suggestions</div>
+                      {apiSuggestions.map((suggestion, i) => (
+                        <div 
+                          key={suggestion.id || i} 
+                          style={{
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            padding: '8px 0', 
+                            cursor: 'pointer',
+                            borderRadius: 4,
+                            transition: 'background-color 0.2s'
+                          }} 
+                          onClick={() => handleSelectDestination(suggestion.name)}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f5f5f5'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                        >
+                          <Image 
+                            src={suggestion.isProperty ? '/images/hotellogo.svg' : '/images/goto.svg'} 
+                            alt="icon" 
+                            width={suggestion.isProperty ? 36 : 24} 
+                            height={suggestion.isProperty ? 36 : 24} 
+                            style={{marginRight: 8}} 
+                          />
+                          <div>
+                            <div style={{fontWeight: 700, color: '#000', fontSize: 14}}>{suggestion.name}</div>
+                            {suggestion.description && (
+                              <div style={{fontSize: 12, color: '#888'}}>{suggestion.description}</div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {!isLoadingSuggestions && destinationInput.trim().length >= 3 && apiSuggestions.length === 0 && (
+                    <div style={{padding: '8px 0', textAlign: 'center', color: '#888', fontSize: 14}}>
+                      No suggestions found for "{destinationInput}"
+                    </div>
+                  )}
+                </div>
+              )}
+              
+              {destinationInput.trim().length < 3 && destinationInput.trim().length > 0 && (
+                <div style={{padding: '8px 0', textAlign: 'center', color: '#888', fontSize: 14}}>
+                  Type at least 3 characters to search
                 </div>
               )}
             </div>

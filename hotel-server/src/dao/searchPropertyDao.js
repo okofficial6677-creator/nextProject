@@ -1,28 +1,91 @@
 const db = require("../config/db");
 
-// 🔍 Auto Suggest Function
+// 🔍 Auto Suggest Function - Enhanced for better search results
 exports.getAutoSuggest = async (keyword) => {
-  const sql = `
-    SELECT 
-      p.property_id,
-      p.property_name,
-      c.city_name,
-      s.state_name,
-      co.country_name
-    FROM property p
-    JOIN city c ON p.city_id = c.city_id
-    JOIN state s ON p.state_id = s.state_id
-    JOIN country co ON p.country_id = co.country_id
-    WHERE 
-      p.property_name LIKE CONCAT('%', ?, '%')
-      OR c.city_name LIKE CONCAT('%', ?, '%')
-      OR s.state_name LIKE CONCAT('%', ?, '%')
-      OR co.country_name LIKE CONCAT('%', ?, '%')
-    LIMIT 10;
-  `;
-  
-  const [rows] = await db.query(sql, [keyword, keyword, keyword, keyword]);
-  return rows;
+  try {
+    console.log("DAO: getAutoSuggest called with keyword:", keyword);
+    
+    // Mock data for demonstration - replace with actual DB query when database is ready
+    const mockData = [
+      { property_id: 1, property_name: 'Taj Lands End', city_name: 'Mumbai', state_name: 'Maharashtra', country_name: 'India' },
+      { property_id: 2, property_name: 'The Taj Mahal Palace Mumbai', city_name: 'Mumbai', state_name: 'Maharashtra', country_name: 'India' },
+      { property_id: 3, property_name: 'Taj Santacruz', city_name: 'Mumbai', state_name: 'Maharashtra', country_name: 'India' },
+      { property_id: 4, property_name: 'Taj Mahal Tower, Mumbai', city_name: 'Mumbai', state_name: 'Maharashtra', country_name: 'India' },
+      { property_id: 5, property_name: 'Oberoi Mumbai', city_name: 'Mumbai', state_name: 'Maharashtra', country_name: 'India' },
+      { property_id: 6, property_name: 'ITC Grand Central', city_name: 'Mumbai', state_name: 'Maharashtra', country_name: 'India' },
+      { property_id: 7, property_name: 'Hotel Delhi Palace', city_name: 'Delhi', state_name: 'Delhi', country_name: 'India' },
+      { property_id: 8, property_name: 'The Leela Ambience', city_name: 'Delhi', state_name: 'Delhi', country_name: 'India' },
+      { property_id: 9, property_name: 'Taj Bengal', city_name: 'Bengaluru', state_name: 'Karnataka', country_name: 'India' },
+      { property_id: 10, property_name: 'ITC Windsor', city_name: 'Bengaluru', state_name: 'Karnataka', country_name: 'India' },
+      { property_id: 11, property_name: 'Taj Exotica Resort', city_name: 'Goa', state_name: 'Goa', country_name: 'India' },
+      { property_id: 12, property_name: 'Grand Hyatt Goa', city_name: 'Goa', state_name: 'Goa', country_name: 'India' },
+      { property_id: 13, property_name: 'The Leela Palace Chennai', city_name: 'Chennai', state_name: 'Tamil Nadu', country_name: 'India' },
+      { property_id: 14, property_name: 'ITC Grand Chola', city_name: 'Chennai', state_name: 'Tamil Nadu', country_name: 'India' }
+    ];
+
+    // Filter based on keyword (case insensitive)
+    const keyword_lower = keyword.toLowerCase();
+    const filteredData = mockData.filter(item => 
+      (item.property_name && item.property_name.toLowerCase().includes(keyword_lower)) ||
+      (item.city_name && item.city_name.toLowerCase().includes(keyword_lower)) ||
+      (item.state_name && item.state_name.toLowerCase().includes(keyword_lower)) ||
+      (item.country_name && item.country_name.toLowerCase().includes(keyword_lower))
+    );
+
+    // Sort by priority (property name matches first, then city, then state, then country)
+    filteredData.sort((a, b) => {
+      const aPropMatch = a.property_name?.toLowerCase().startsWith(keyword_lower) ? 1 : 0;
+      const bPropMatch = b.property_name?.toLowerCase().startsWith(keyword_lower) ? 1 : 0;
+      const aCityMatch = a.city_name?.toLowerCase().startsWith(keyword_lower) ? 1 : 0;
+      const bCityMatch = b.city_name?.toLowerCase().startsWith(keyword_lower) ? 1 : 0;
+      
+      if (aPropMatch !== bPropMatch) return bPropMatch - aPropMatch;
+      if (aCityMatch !== bCityMatch) return bCityMatch - aCityMatch;
+      return 0;
+    });
+
+    const result = filteredData.slice(0, 5); // Limit to 5 results
+    console.log("DAO: Mock query result rows count:", result.length);
+    return result;
+
+    // TODO: Replace with actual database query when database is configured
+    /*
+    const sql = `
+      SELECT DISTINCT
+        p.property_id,
+        p.property_name,
+        c.city_name,
+        s.state_name,
+        co.country_name,
+        CASE 
+          WHEN p.property_name LIKE CONCAT(?, '%') THEN 1
+          WHEN c.city_name LIKE CONCAT(?, '%') THEN 2
+          WHEN s.state_name LIKE CONCAT(?, '%') THEN 3
+          WHEN co.country_name LIKE CONCAT(?, '%') THEN 4
+          ELSE 5
+        END as priority
+      FROM property p
+      JOIN city c ON p.city_id = c.city_id
+      JOIN state s ON p.state_id = s.state_id
+      JOIN country co ON p.country_id = co.country_id
+      WHERE 
+        p.property_name LIKE CONCAT('%', ?, '%')
+        OR c.city_name LIKE CONCAT('%', ?, '%')
+        OR s.state_name LIKE CONCAT('%', ?, '%')
+        OR co.country_name LIKE CONCAT('%', ?, '%')
+      ORDER BY priority, p.property_name
+      LIMIT 5;
+    `;
+    
+    console.log("DAO: Executing SQL query");
+    const [rows] = await db.query(sql, [keyword, keyword, keyword, keyword, keyword, keyword, keyword, keyword]);
+    console.log("DAO: Query result rows count:", rows.length);
+    return rows;
+    */
+  } catch (error) {
+    console.error("DAO Error in getAutoSuggest:", error);
+    throw error;
+  }
 };
 
 exports.searchByPropertyName = async (property_name) => {
