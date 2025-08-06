@@ -123,10 +123,14 @@ export default function SearchPage() {
             const response = await fetch(`http://localhost:5000/searchproperty/searchByName/${destination}`)
             const result = await response.json()
             data = Array.isArray(result) ? result : []
+            // Ensure recommendations are visible after destination search
+            setShowRecommendedSection(true)
           } else {
             const response = await fetch("http://localhost:5000/hotelinfo/card")
             const result = await response.json()
             data = Array.isArray(result) ? result : []
+            // Show recommendations when no specific destination
+            setShowRecommendedSection(true)
           }
         }
         const formatted = data.map((hotel, index) => formatHotel(hotel, index))
@@ -147,6 +151,10 @@ export default function SearchPage() {
       try {
         const recommendations = await searchApi.getRecommendedSearches(8);
         setRecommendedSearches(recommendations);
+        // Ensure recommendations section is visible when data is loaded
+        if (recommendations.length > 0) {
+          setShowRecommendedSection(true);
+        }
       } catch (error) {
         console.error('Error fetching recommended searches:', error);
         setRecommendedSearches([]);
@@ -154,7 +162,7 @@ export default function SearchPage() {
     };
 
     fetchRecommendedSearches();
-  }, [])
+  }, [destination]) // Refresh recommendations when destination changes
 
   const handleSortChange = (value) => {
     setSort(value)
@@ -168,11 +176,27 @@ export default function SearchPage() {
     (destinationInput, dates, rooms) => {
       if (!destinationInput) {
         setSearchedHotels(hotels) // Show all cards if no search
+        setShowRecommendedSection(true) // Show recommendations when no search
         return
       }
-      // Filter by hotel name (case-insensitive)
-      const filtered = hotels.filter((hotel) => hotel.name.toLowerCase() === destinationInput.toLowerCase())
+      
+      // Filter by hotel name OR location (case-insensitive and partial match)
+      const searchTerm = destinationInput.toLowerCase().trim()
+      const filtered = hotels.filter((hotel) => {
+        const hotelName = (hotel.name || '').toLowerCase()
+        const location = (hotel.location || '').toLowerCase()
+        const cityName = (hotel.city_name || '').toLowerCase()
+        const stateName = (hotel.state_name || '').toLowerCase()
+        
+        // Match hotel name, location, city, or state
+        return hotelName.includes(searchTerm) || 
+               location.includes(searchTerm) || 
+               cityName.includes(searchTerm) || 
+               stateName.includes(searchTerm)
+      })
+      
       setSearchedHotels(filtered)
+      setShowRecommendedSection(true) // Always show recommendations after search
     },
     [hotels],
   )

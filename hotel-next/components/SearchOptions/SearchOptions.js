@@ -191,6 +191,15 @@ export default function SearchOptions({
     setDestinationInput(name);
     setDestinationError('');
     setOpenCard(null);
+    
+    // Automatically trigger search if onSearch callback is provided
+    if (onSearch && dateRange[0].startDate && dateRange[0].endDate) {
+      const dates = {
+        startDate: dateRange[0].startDate.toISOString(),
+        endDate: dateRange[0].endDate.toISOString()
+      };
+      onSearch(name, dates, rooms);
+    }
   };
 
   // Validate guests on change
