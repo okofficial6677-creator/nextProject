@@ -1,0 +1,159 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #fff;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.loadingSpinner {
+  font-size: 18px;
+  color: #666;
+}
+
+.errorContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  color: #e74c3c;
+}
+
+.hotelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  padding: 20px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.hotelInfo {
+  flex: 1;
+}
+
+.hotelName {
+  font-size: 32px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 8px 0;
+}
+
+.hotelLocation {
+  font-size: 16px;
+  color: #7f8c8d;
+  margin: 0 0 12px 0;
+}
+
+.ratingSection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rating {
+  background: #27ae60;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.reviewCount {
+  color: #7f8c8d;
+  font-size: 14px;
+}
+
+.priceSection {
+  text-align: right;
+  min-width: 300px;
+}
+
+.cancellationPolicy {
+  font-size: 14px;
+  color: #27ae60;
+  margin-bottom: 8px;
+}
+
+.priceInfo {
+  margin-bottom: 8px;
+}
+
+.oldPrice {
+  text-decoration: line-through;
+  color: #7f8c8d;
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.currentPrice {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-right: 8px;
+}
+
+.taxes {
+  font-size: 14px;
+  color: #7f8c8d;
+}
+
+.availability {
+  font-size: 14px;
+  color: #e67e22;
+  margin-bottom: 16px;
+}
+
+.selectRoomBtn {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.selectRoomBtn:hover {
+  background: #2980b9;
+}
+
+.tabNavigation {
+  display: flex;
+  border-bottom: 2px solid #e0e0e0;
+  margin-bottom: 30px;
+}
+
+.tab {
+  background: none;
+  border: none;
+  padding: 16px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #7f8c8d;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s;
+}
+
+.tab:hover {
+  color: #3498db;
+}
+
+.activeTab {
+  color: #3498db;
+  border-bottom-color: #3498db;
+}
+
+.tabContent {
+  min-height: 400px;
+} 

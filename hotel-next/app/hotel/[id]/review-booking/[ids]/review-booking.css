@@ -1,0 +1,676 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
+      "Segoe UI Emoji", "Segoe UI Symbol";
+    line-height: 1.5;
+    color: #333;
+  }
+  
+  a {
+    color: #0066ff;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Common Header Styles */
+  .common-header {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    padding: 16px 0;
+  }
+  
+  .common-header-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+  
+  .common-header-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+  }
+  
+  /* Main container */
+  .review-booking-page {
+    background-color: #f5f6fa;
+    min-height: 100vh;
+    padding: 32px 16px;
+  }
+  
+  /* Main content card */
+  .main-content-card {
+    max-width: 1100px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    padding: 32px;
+    display: grid;
+    grid-template-columns: 1fr; /* Default to single column */
+    gap: 32px;
+  }
+  
+  @media (min-width: 1024px) {
+    /* lg breakpoint */
+    .main-content-card {
+      grid-template-columns: 2fr 1fr; /* Two columns on larger screens */
+    }
+  }
+  
+  /* Section titles */
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 22px;
+    margin-bottom: 16px;
+    color: #333;
+  }
+  
+  .section-title svg {
+    color: #0066ff;
+  }
+  
+  /* Hotel and Room Info Card */
+  .custom-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    background-color: #fff;
+    color: #333;
+  }
+  
+  .custom-card-header {
+    padding: 24px;
+    padding-bottom: 0;
+  }
+  
+  .custom-card-title {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  
+  .custom-card-content {
+    padding: 24px;
+    padding-top: 0;
+  }
+  
+  .hotel-info-content {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+  
+  @media (min-width: 768px) {
+    /* md breakpoint */
+    .hotel-info-content {
+      flex-direction: row;
+    }
+  }
+  
+  .hotel-image-container {
+    width: 100%;
+    flex-shrink: 0;
+  }
+  
+  @media (min-width: 768px) {
+    /* md breakpoint */
+    .hotel-image-container {
+      width: 33.333333%;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    /* lg breakpoint */
+    .hotel-image-container {
+      width: 25%;
+    }
+  }
+  
+  .hotel-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+  }
+  
+  @media (min-width: 768px) {
+    /* md breakpoint */
+    .hotel-image {
+      border-radius: 0;
+      border-top-left-radius: 12px;
+      border-bottom-left-radius: 12px;
+    }
+  }
+  
+  .rating-badge-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+  }
+  
+  .rating-badge {
+    background-color: #2ecc71;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  
+  .hotel-details-content {
+    padding: 16px;
+    flex: 1;
+    display: grid;
+    gap: 8px;
+  }
+  
+  .hotel-name {
+    font-weight: 700;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .hotel-name span {
+    color: #f1c40f;
+  }
+  
+  .hotel-address {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .room-type {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .cancellation-info,
+  .board-basis-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #27ae60;
+    font-weight: 500;
+  }
+  
+  .review-cancellation-text {
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 8px;
+    color: #333;
+  }
+  
+  .check-in-out-text,
+  .guests-text,
+  .room-details-text {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .room-amenities {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .room-amenity-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  /* Guest Details Section */
+  .guest-details-warning {
+    background-color: #fff6f6;
+    color: #c0392b;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .guest-room-section {
+    border: 1px solid #e0e0e0;
+    padding: 16px;
+    border-radius: 8px;
+  }
+  
+  .guest-room-title {
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #333;
+  }
+  
+  .guest-input-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  
+  @media (min-width: 768px) {
+    /* md breakpoint */
+    .guest-input-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  .guest-input-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .save-details-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  /* Special Requests Section */
+  .special-requests-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+  
+  .special-request-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .request-textarea {
+    width: 100%;
+    min-height: 48px;
+    border-radius: 6px;
+    border: 1px solid #eee;
+    padding: 8px;
+    font-size: 14px;
+    outline: none;
+    resize: vertical;
+  }
+  
+  .request-textarea:focus {
+    border-color: #0066ff;
+    box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.25);
+  }
+  
+  .special-requests-note {
+    font-size: 12px;
+    color: #888;
+    margin-top: 4px;
+  }
+  
+  /* Continue Button */
+  .continue-button-container {
+    text-align: center;
+    margin-top: 32px;
+  }
+  
+  /* Important Information Section */
+  .important-info-section {
+    margin-top: 40px;
+    background-color: #f8f8fa;
+    border-radius: 8px;
+    padding: 16px;
+  }
+  
+  .important-info-title {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #333;
+  }
+  
+  .important-info-title svg {
+    color: #0066ff;
+  }
+  
+  .important-info-text {
+    color: #888;
+    font-size: 14px;
+  }
+  
+  .check-times-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 12px;
+  }
+  
+  @media (min-width: 640px) {
+    /* sm breakpoint */
+    .check-times-container {
+      flex-direction: row;
+      gap: 32px;
+    }
+  }
+  
+  .check-time-item {
+    font-weight: 600;
+    color: #333;
+  }
+  
+  /* Right Column */
+  .right-column-content {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  
+  /* Price Summary Card */
+  .price-summary-card {
+    background-color: #f8f8fa;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+  
+  .price-summary-title {
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 16px;
+    color: #333;
+  }
+  
+  .price-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 12px;
+    color: #333;
+  }
+  
+  .taxes-info-icon {
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    color: #888;
+    cursor: pointer;
+    vertical-align: middle;
+    margin-left: 4px;
+  }
+  
+  .total-amount-row {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .rates-quoted-text {
+    font-size: 12px;
+    color: #888;
+    margin-top: 4px;
+  }
+  
+  .tax-disclaimer {
+    background-color: #e0f2f7;
+    color: #2196f3;
+    padding: 12px;
+    border-radius: 6px;
+    margin-top: 16px;
+    font-size: 14px;
+  }
+  
+  .terms-checkbox-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  
+  .terms-checkbox {
+    margin-top: 4px;
+  }
+  
+  .terms-label {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+  }
+  
+  .terms-link {
+    color: #0066ff;
+    text-decoration: underline;
+  }
+  
+  /* Need Assistance Section */
+  .need-assistance-section {
+    padding: 24px;
+    border-radius: 8px;
+  }
+  
+  .need-assistance-title {
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: #333;
+  }
+  
+  .contact-info {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  /* Custom UI Component Styles */
+  
+  /* Button */
+  .custom-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    border: 1px solid transparent;
+    background-color: #0066ff;
+    color: #fff;
+  }
+  
+  .custom-button:hover {
+    background-color: #0056e6;
+  }
+  
+  .custom-button.variant-link {
+    background: none;
+    border: none;
+    color: #0066ff;
+    text-decoration: underline;
+    padding: 0;
+    height: auto;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .custom-button.variant-link:hover {
+    color: #0044cc;
+    text-decoration: underline;
+  }
+  
+  .custom-button.book-button {
+    width: 100%;
+    margin-top: 16px;
+    padding: 12px 0;
+    font-weight: 700;
+  }
+  
+  .custom-button.continue-button {
+    padding: 14px 48px;
+    font-weight: 700;
+    font-size: 18px;
+  }
+  
+  /* Input */
+  .custom-input {
+    display: flex;
+    height: 40px;
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    background-color: #fff;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  
+  .custom-input::placeholder {
+    color: #888;
+  }
+  
+  .custom-input:focus {
+    border-color: #0066ff;
+    box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.25);
+  }
+  
+  .custom-input:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  
+  /* Label */
+  .custom-label {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #333;
+  }
+  
+  /* Checkbox */
+  .custom-checkbox-container {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  .custom-checkbox-input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  .custom-checkbox-checkmark {
+    height: 16px;
+    width: 16px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  }
+  
+  .custom-checkbox-input:checked + .custom-checkbox-checkmark {
+    background-color: #0066ff;
+    border-color: #0066ff;
+  }
+  
+  .custom-checkbox-checkmark svg {
+    color: #fff;
+    width: 12px;
+    height: 12px;
+    display: none;
+  }
+  
+  .custom-checkbox-input:checked + .custom-checkbox-checkmark svg {
+    display: block;
+  }
+  
+  /* Select */
+  .custom-select {
+    display: flex;
+    height: 40px;
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    background-color: #fff;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M287%2C197.3L159.3%2C69.6c-3.2-3.2-8.4-3.2-11.6%2C0L5.4%2C197.3c-3.2%2C3.2-3.2%2C8.4%2C0%2C11.6l11.6%2C11.6c3.2%2C3.2%2C8.4%2C3.2%2C11.6%2C0l120.7-120.7l120.7%2C120.7c3.2%2C3.2%2C8.4%2C3.2%2C11.6%2C0l11.6-11.6C290.2%2C205.7%2C290.2%2C200.5%2C287%2C197.3z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px top 50%;
+    background-size: 12px auto;
+  }
+  
+  .custom-select:focus {
+    border-color: #0066ff;
+    box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.25);
+  }
+  
+  /* Separator */
+  .custom-separator {
+    height: 1px;
+    width: 100%;
+    background-color: #e0e0e0;
+    margin: 12px 0;
+  }
+  
+  /* Tooltip */
+  .custom-tooltip-trigger {
+    cursor: help;
+    position: relative; /* Needed for positioning content */
+  }
+  
+  .custom-tooltip-content {
+    display: none;
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 100;
+    white-space: normal;
+    max-width: 200px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    /* Positioning for top */
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 8px; /* Space between trigger and tooltip */
+  }
+  
+  .custom-tooltip-trigger:hover .custom-tooltip-content {
+    display: block;
+  }
+  

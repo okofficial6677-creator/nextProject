@@ -1,0 +1,163 @@
+.container {
+  min-height: 100vh;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  width: 100%;
+  padding: 32px 0 0 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logoRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mainCard {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  min-width: 700px;
+  max-width: 900px;
+  width: 100%;
+  padding: 0;
+}
+
+.imageSection {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+  min-width: 320px;
+  min-height: 400px;
+}
+
+.travelImg {
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.formSection {
+  flex: 1;
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.inputGroup label {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.inputGroup input {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #fafafa;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.inputGroup input:focus {
+  border: 1.5px solid #0072ff;
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.registerBtn {
+  width: 100%;
+  background: #0072ff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 0;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.registerBtn:hover {
+  background: #005edb;
+}
+
+.loginLink {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 0.98rem;
+  color: #222;
+}
+
+.loginLink a {
+  color: #0072ff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+@media (max-width: 900px) {
+  .card {
+    flex-direction: column;
+    min-width: 320px;
+    max-width: 95vw;
+  }
+  .imageSection {
+    min-height: 220px;
+  }
+  .formSection {
+    padding: 32px 16px;
+  }
+  .row {
+    flex-direction: column;
+    gap: 0;
+  }
+} 

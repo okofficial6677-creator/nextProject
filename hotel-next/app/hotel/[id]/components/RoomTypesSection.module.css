@@ -1,0 +1,353 @@
+.roomTypesContainer {
+  padding: 20px 0;
+}
+
+.sectionTitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 24px;
+}
+
+.priceDisplaySection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.priceDisplayOptions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.priceDisplayLabel {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.radioGroup {
+  display: flex;
+  gap: 16px;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.radioLabel input[type="radio"] {
+  margin: 0;
+}
+
+.earningsToggle {
+  display: flex;
+  gap: 8px;
+}
+
+.toggleBtn {
+  padding: 8px 16px;
+  border: 1px solid #3498db;
+  background: white;
+  color: #3498db;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.toggleBtn.active {
+  background: #3498db;
+  color: white;
+}
+
+.bookingInfo {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.bookingField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bookingLabel {
+  font-size: 12px;
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+.bookingValue {
+  font-size: 14px;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.roomTypeTabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.roomTypeTab {
+  padding: 12px 20px;
+  border: none;
+  background: none;
+  color: #7f8c8d;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s;
+  font-weight: 500;
+}
+
+.roomTypeTab:hover {
+  color: #3498db;
+}
+
+.activeRoomTab {
+  color: #3498db;
+  border-bottom-color: #3498db;
+}
+
+.filterSection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.filterCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.filterCheckbox input[type="checkbox"] {
+  margin: 0;
+}
+
+.roomDetails {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 32px;
+}
+
+.roomInfo {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  height: fit-content;
+}
+
+.roomTypeTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 12px;
+}
+
+.roomDescription {
+  font-size: 14px;
+  color: #34495e;
+  margin-bottom: 8px;
+}
+
+.roomCapacity {
+  font-size: 14px;
+  color: #7f8c8d;
+  margin-bottom: 8px;
+}
+
+.roomSize {
+  font-size: 14px;
+  color: #7f8c8d;
+  margin-bottom: 20px;
+}
+
+.roomAmenitiesList h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 12px;
+}
+
+.amenitiesGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.roomAmenity {
+  background: white;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  color: #2c3e50;
+  border: 1px solid #e0e0e0;
+}
+
+.viewAllAmenitiesBtn {
+  background: none;
+  border: none;
+  color: #3498db;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.ratePlansContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ratePlanCard {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  background: white;
+}
+
+.ratePlanHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.cancellationStatus {
+  font-size: 14px;
+  color: #27ae60;
+  font-weight: 500;
+}
+
+.cancellationStatus.nonRefundable {
+  color: #e74c3c;
+}
+
+.ratePlanLabel {
+  background: #3498db;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ratePlanDetails {
+  margin-bottom: 16px;
+}
+
+.boardBasis {
+  font-size: 16px;
+  font-weight: 500;
+  color: #2c3e50;
+  margin-bottom: 4px;
+}
+
+.accommodates {
+  font-size: 14px;
+  color: #7f8c8d;
+}
+
+.ratePlanPricing {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.priceInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.price {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.taxes {
+  font-size: 14px;
+  color: #7f8c8d;
+}
+
+.earningsInfo {
+  font-size: 14px;
+  color: #27ae60;
+  font-weight: 500;
+}
+
+.ratePlanActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.selectBtn {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.selectBtn:hover {
+  background: #2980b9;
+}
+
+.compareCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.compareCheckbox input[type="checkbox"] {
+  margin: 0;
+}
+
+.ratePlanLinks {
+  display: flex;
+  gap: 16px;
+}
+
+.linkBtn {
+  background: none;
+  border: none;
+  color: #3498db;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.linkBtn:hover {
+  color: #2980b9;
+} 

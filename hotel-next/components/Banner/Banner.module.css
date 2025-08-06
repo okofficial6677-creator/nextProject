@@ -1,0 +1,46 @@
+.banner {
+    background-image: url('/images/valeriia-bugaiova-_pPHgeHz1uk-unsplash 1.svg');
+    background-repeat: no-repeat;
+    background-position: fill fill;
+    padding: 3.5rem 2rem 3rem;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    height: 540px;
+    margin: auto 100px;
+  }
+  
+  /* .bannerContent { } */
+  .bannerTitle {
+    font-size: 64px;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  .bannerSubtitle {
+    font-size: 24px;
+    opacity: 0.9;
+  }
+  
+  .search {
+    background: #fff;
+    padding: 1rem;
+    border-radius: 0 8px 8px 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 85%;
+    margin: 4rem auto;
+  }
+  .searchTitle {
+    text-align: start;
+    padding-bottom: 10px;
+    border-bottom: 3px solid rgb(88, 135, 223);
+    margin-bottom: 10px;
+    width: 70px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .searchTitleName {
+    font-size: 14px;
+    font-weight: bold;
+  }
