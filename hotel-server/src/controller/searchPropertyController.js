@@ -4,11 +4,18 @@ const propertyService = require("../business/searchPropertyService");
 exports.getAutoSuggest = async (req, res) => {
   try {
     const keyword = req.params.keyword;
+    console.log("Auto suggest request for keyword:", keyword);
+    
+    if (!keyword || keyword.trim().length < 3) {
+      return res.json({ success: true, data: [] });
+    }
+    
     const result = await propertyService.getAutoSuggest(keyword);
+    console.log("Auto suggest result:", result);
     res.json({ success: true, data: result });
   } catch (err) {
     console.error("Controller Error:", err);
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ success: false, message: err.message || "Internal server error" });
   }
 };
 
