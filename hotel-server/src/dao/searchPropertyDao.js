@@ -121,7 +121,10 @@ exports.getAutoSuggest = async (keyword) => {
   }
 };
 
-exports.searchByPropertyName = async (property_name) => {
+exports.searchByPropertyName = async (search_term) => {
+  // Track search for analytics
+  this.trackSearch(search_term);
+  
   const [rows] = await db.execute(`
     SELECT
       p.property_id,
@@ -141,7 +144,16 @@ exports.searchByPropertyName = async (property_name) => {
       MIN(r.extra_beds) AS extra_beds,
       MIN(r.max_occupancy) AS max_occupancy,
       GROUP_CONCAT(DISTINCT f.facility_name) AS amenities,
-      GROUP_CONCAT(DISTINCT i.inclusion_name) AS inclusion_names
+      GROUP_CONCAT(DISTINCT i.inclusion_name) AS inclusion_names,
+      CASE 
+        WHEN p.property_name LIKE CONCAT(?, '%') THEN 1
+        WHEN c.city_name LIKE CONCAT(?, '%') THEN 2
+        WHEN s.state_name LIKE CONCAT(?, '%') THEN 3
+        WHEN p.property_name LIKE CONCAT('%', ?, '%') THEN 4
+        WHEN c.city_name LIKE CONCAT('%', ?, '%') THEN 5
+        WHEN s.state_name LIKE CONCAT('%', ?, '%') THEN 6
+        ELSE 7
+      END as search_priority
 
     FROM property p
     LEFT JOIN property_photos pp ON pp.property_id = p.property_id
@@ -155,9 +167,12 @@ exports.searchByPropertyName = async (property_name) => {
     LEFT JOIN inclusions i ON i.inclusion_id = pi.inclusion_id
 
     WHERE p.property_name LIKE ?
+       OR c.city_name LIKE ?
+       OR s.state_name LIKE ?
     GROUP BY p.property_id
-    LIMIT 10;
-  `, [`%${property_name}%`]);
+    ORDER BY search_priority, p.property_name
+    LIMIT 20;
+  `, [search_term, search_term, search_term, search_term, search_term, search_term, `%${search_term}%`, `%${search_term}%`, `%${search_term}%`]);
 
   return rows;
 };
