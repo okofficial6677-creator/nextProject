@@ -66,5 +66,57 @@ export const searchApi = {
       state: item.state_name,
       country: item.country_name
     };
+  },
+
+  // 🎯 Get Recommended Searches
+  async getRecommendedSearches(limit = 6) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/searchproperty/recommendations?limit=${limit}`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      if (data.success && Array.isArray(data.data)) {
+        return data.data;
+      }
+      
+      return [];
+    } catch (error) {
+      console.error('Recommended searches API error:', error);
+      // Return fallback recommendations
+      return [
+        { keyword: 'mumbai', type: 'destination', description: 'Financial Capital' },
+        { keyword: 'delhi', type: 'destination', description: 'Capital City' },
+        { keyword: 'goa', type: 'destination', description: 'Beach Paradise' },
+        { keyword: 'bengaluru', type: 'destination', description: 'Silicon Valley of India' },
+        { keyword: 'chennai', type: 'destination', description: 'Gateway to South India' },
+        { keyword: 'jaipur', type: 'destination', description: 'Pink City' }
+      ].slice(0, limit);
+    }
+  },
+
+  // 📊 Get Search Analytics
+  async getSearchAnalytics() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/searchproperty/analytics`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        return data.data;
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('Search analytics API error:', error);
+      return null;
+    }
   }
 };

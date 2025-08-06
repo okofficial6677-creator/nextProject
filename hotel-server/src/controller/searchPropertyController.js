@@ -66,3 +66,49 @@ exports.getPropertyById = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+// 🎯 Recommended Search Controllers
+exports.getRecommendedSearches = async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit) || 6;
+    console.log("Recommended searches request with limit:", limit);
+    
+    const recommendations = await propertyService.getRecommendedSearches(limit);
+    console.log("Recommended searches result:", recommendations);
+    
+    res.json({ 
+      success: true, 
+      data: recommendations,
+      message: `Retrieved ${recommendations.length} recommended searches`
+    });
+  } catch (err) {
+    console.error("Controller Error in getRecommendedSearches:", err);
+    res.status(500).json({ 
+      success: false, 
+      message: err.message || "Internal server error",
+      data: []
+    });
+  }
+};
+
+exports.getSearchAnalytics = async (req, res) => {
+  try {
+    console.log("Search analytics request");
+    
+    const analytics = await propertyService.getSearchAnalytics();
+    console.log("Search analytics result:", analytics);
+    
+    res.json({ 
+      success: true, 
+      data: analytics,
+      message: "Search analytics retrieved successfully"
+    });
+  } catch (err) {
+    console.error("Controller Error in getSearchAnalytics:", err);
+    res.status(500).json({ 
+      success: false, 
+      message: err.message || "Internal server error",
+      data: null
+    });
+  }
+};
