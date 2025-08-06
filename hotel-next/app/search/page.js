@@ -173,32 +173,56 @@ export default function SearchPage() {
 
   // Add this handler for search bar
   const handleSearch = useCallback(
-    (destinationInput, dates, rooms) => {
+    async (destinationInput, dates, rooms) => {
       if (!destinationInput) {
         setSearchedHotels(hotels) // Show all cards if no search
         setShowRecommendedSection(true) // Show recommendations when no search
         return
       }
       
-      // Filter by hotel name OR location (case-insensitive and partial match)
-      const searchTerm = destinationInput.toLowerCase().trim()
-      const filtered = hotels.filter((hotel) => {
-        const hotelName = (hotel.name || '').toLowerCase()
-        const location = (hotel.location || '').toLowerCase()
-        const cityName = (hotel.city_name || '').toLowerCase()
-        const stateName = (hotel.state_name || '').toLowerCase()
+      try {
+        // Make API call to backend search endpoint
+        const searchTerm = destinationInput.trim()
+        console.log("Making search API call for:", searchTerm)
         
-        // Match hotel name, location, city, or state
-        return hotelName.includes(searchTerm) || 
-               location.includes(searchTerm) || 
-               cityName.includes(searchTerm) || 
-               stateName.includes(searchTerm)
-      })
-      
-      setSearchedHotels(filtered)
-      setShowRecommendedSection(true) // Always show recommendations after search
+        const response = await fetch(`http://localhost:5000/searchproperty/searchByName/${encodeURIComponent(searchTerm)}`)
+        const result = await response.json()
+        const data = Array.isArray(result) ? result : []
+        
+        console.log("Search API returned:", data.length, "hotels")
+        
+        // Format the search results same way as other hotel data
+        const formatted = data.map((hotel, index) => formatHotel(hotel, index))
+        setSearchedHotels(formatted)
+        setShowRecommendedSection(true) // Always show recommendations after search
+        
+        // Update URL with destination parameter for deep linking
+        const params = new URLSearchParams(searchParams.toString())
+        params.set("destination", searchTerm)
+        router.replace(`/search?${params.toString()}`)
+        
+      } catch (error) {
+        console.error("Error in search API call:", error)
+        // Fallback to frontend filtering if API fails
+        const searchTermLower = destinationInput.toLowerCase().trim()
+        const filtered = hotels.filter((hotel) => {
+          const hotelName = (hotel.name || '').toLowerCase()
+          const location = (hotel.location || '').toLowerCase()
+          const cityName = (hotel.city_name || '').toLowerCase()
+          const stateName = (hotel.state_name || '').toLowerCase()
+          
+          // Match hotel name, location, city, or state
+          return hotelName.includes(searchTermLower) || 
+                 location.includes(searchTermLower) || 
+                 cityName.includes(searchTermLower) || 
+                 stateName.includes(searchTermLower)
+        })
+        
+        setSearchedHotels(filtered)
+        setShowRecommendedSection(true)
+      }
     },
-    [hotels],
+    [hotels, searchParams, router],
   )
 
   const handleSearchSelect = useCallback((hotelsToShow) => {
