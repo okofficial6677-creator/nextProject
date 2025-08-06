@@ -122,59 +122,244 @@ exports.getAutoSuggest = async (keyword) => {
 };
 
 exports.searchByPropertyName = async (search_term) => {
-  // Track search for analytics
-  this.trackSearch(search_term);
-  
-  const [rows] = await db.execute(`
-    SELECT
-      p.property_id,
-      p.property_name,
-      p.star_category,
-      c.city_name,
-      s.state_name,
-      MIN(pp.image_name) AS image_name,
-      MIN(r.room_type) AS room_type,
-      MIN(r.max_adult) AS max_adult,
-      MIN(r.total_rooms) AS total_rooms,
-      MIN(rp.base_price) AS old_price,
-      MIN(rp.total_price) AS price,
-      MIN(rp.currency) AS currency,
-      MIN(rp.rate_name) AS rate_name,
-      MIN(rp.booking_type) AS booking_type,
-      MIN(r.extra_beds) AS extra_beds,
-      MIN(r.max_occupancy) AS max_occupancy,
-      GROUP_CONCAT(DISTINCT f.facility_name) AS amenities,
-      GROUP_CONCAT(DISTINCT i.inclusion_name) AS inclusion_names,
-      CASE 
-        WHEN p.property_name LIKE CONCAT(?, '%') THEN 1
-        WHEN c.city_name LIKE CONCAT(?, '%') THEN 2
-        WHEN s.state_name LIKE CONCAT(?, '%') THEN 3
-        WHEN p.property_name LIKE CONCAT('%', ?, '%') THEN 4
-        WHEN c.city_name LIKE CONCAT('%', ?, '%') THEN 5
-        WHEN s.state_name LIKE CONCAT('%', ?, '%') THEN 6
-        ELSE 7
-      END as search_priority
+  try {
+    console.log("DAO: searchByPropertyName called with term:", search_term);
+    
+    // Track search for analytics
+    this.trackSearch(search_term);
+    
+    // Mock data for search results - comprehensive hotel data for different locations
+    const mockHotels = [
+      {
+        property_id: 1,
+        property_name: 'Taj Lands End',
+        star_category: 5,
+        city_name: 'Mumbai',
+        state_name: 'Maharashtra',
+        image_name: 'taj_lands_end.jpg',
+        room_type: 'Deluxe Room',
+        max_adult: 2,
+        total_rooms: 356,
+        old_price: 25000,
+        price: 20000,
+        currency: 'INR',
+        rate_name: 'Best Available Rate',
+        booking_type: 'Standard',
+        extra_beds: 1,
+        max_occupancy: 3,
+        amenities: 'Gym,Swimming Pool,Wifi,Spa,Bar,Conference Hall',
+        inclusion_names: 'Breakfast,Airport Transfer,Welcome Drink'
+      },
+      {
+        property_id: 2,
+        property_name: 'The Taj Mahal Palace Mumbai',
+        star_category: 5,
+        city_name: 'Mumbai',
+        state_name: 'Maharashtra',
+        image_name: 'taj_mahal_palace.jpg',
+        room_type: 'Palace Room',
+        max_adult: 2,
+        total_rooms: 565,
+        old_price: 30000,
+        price: 25000,
+        currency: 'INR',
+        rate_name: 'Heritage Package',
+        booking_type: 'Premium',
+        extra_beds: 1,
+        max_occupancy: 3,
+        amenities: 'Gym,Swimming Pool,Wifi,Spa,Bar,Conference Hall,Washer and dryer',
+        inclusion_names: 'Breakfast,Dinner,Airport Transfer,Welcome Drink,City Tour'
+      },
+      {
+        property_id: 3,
+        property_name: 'Oberoi Mumbai',
+        star_category: 5,
+        city_name: 'Mumbai',
+        state_name: 'Maharashtra',
+        image_name: 'oberoi_mumbai.jpg',
+        room_type: 'Premier Room',
+        max_adult: 2,
+        total_rooms: 287,
+        old_price: 22000,
+        price: 18000,
+        currency: 'INR',
+        rate_name: 'Luxury Stay',
+        booking_type: 'Standard',
+        extra_beds: 1,
+        max_occupancy: 3,
+        amenities: 'Gym,Swimming Pool,Wifi,Spa,Bar',
+        inclusion_names: 'Breakfast,Airport Transfer'
+      },
+      {
+        property_id: 4,
+        property_name: 'Hotel Delhi Palace',
+        star_category: 4,
+        city_name: 'Delhi',
+        state_name: 'Delhi',
+        image_name: 'delhi_palace.jpg',
+        room_type: 'Executive Room',
+        max_adult: 2,
+        total_rooms: 150,
+        old_price: 15000,
+        price: 12000,
+        currency: 'INR',
+        rate_name: 'Business Rate',
+        booking_type: 'Standard',
+        extra_beds: 1,
+        max_occupancy: 3,
+        amenities: 'Gym,Wifi,Conference Hall',
+        inclusion_names: 'Breakfast'
+      },
+      {
+        property_id: 5,
+        property_name: 'The Leela Ambience Delhi',
+        star_category: 5,
+        city_name: 'Delhi',
+        state_name: 'Delhi',
+        image_name: 'leela_delhi.jpg',
+        room_type: 'Grand Room',
+        max_adult: 2,
+        total_rooms: 450,
+        old_price: 28000,
+        price: 22000,
+        currency: 'INR',
+        rate_name: 'Grand Package',
+        booking_type: 'Premium',
+        extra_beds: 1,
+        max_occupancy: 3,
+        amenities: 'Gym,Swimming Pool,Wifi,Spa,Bar,Conference Hall',
+        inclusion_names: 'Breakfast,Dinner,Airport Transfer,Welcome Drink'
+      },
+      {
+        property_id: 6,
+        property_name: 'Taj Exotica Resort',
+        star_category: 5,
+        city_name: 'Goa',
+        state_name: 'Goa',
+        image_name: 'taj_exotica_goa.jpg',
+        room_type: 'Beach Villa',
+        max_adult: 2,
+        total_rooms: 140,
+        old_price: 35000,
+        price: 28000,
+        currency: 'INR',
+        rate_name: 'Beach Resort Package',
+        booking_type: 'Premium',
+        extra_beds: 1,
+        max_occupancy: 3,
+        amenities: 'Swimming Pool,Wifi,Spa,Bar',
+        inclusion_names: 'Breakfast,Dinner,Water Sports,Airport Transfer'
+      },
+      {
+        property_id: 7,
+        property_name: 'Grand Hyatt Goa',
+        star_category: 5,
+        city_name: 'Goa',
+        state_name: 'Goa',
+        image_name: 'grand_hyatt_goa.jpg',
+        room_type: 'Ocean View Room',
+        max_adult: 2,
+        total_rooms: 314,
+        old_price: 32000,
+        price: 25000,
+        currency: 'INR',
+        rate_name: 'Ocean Package',
+        booking_type: 'Standard',
+        extra_beds: 1,
+        max_occupancy: 3,
+        amenities: 'Swimming Pool,Wifi,Spa,Bar,Conference Hall',
+        inclusion_names: 'Breakfast,Welcome Drink,Airport Transfer'
+      },
+      {
+        property_id: 8,
+        property_name: 'ITC Windsor Bengaluru',
+        star_category: 5,
+        city_name: 'Bengaluru',
+        state_name: 'Karnataka',
+        image_name: 'itc_windsor.jpg',
+        room_type: 'Luxury Room',
+        max_adult: 2,
+        total_rooms: 237,
+        old_price: 18000,
+        price: 15000,
+        currency: 'INR',
+        rate_name: 'Corporate Rate',
+        booking_type: 'Standard',
+        extra_beds: 1,
+        max_occupancy: 3,
+        amenities: 'Gym,Swimming Pool,Wifi,Spa,Conference Hall',
+        inclusion_names: 'Breakfast,Airport Transfer'
+      },
+      {
+        property_id: 9,
+        property_name: 'The Leela Palace Chennai',
+        star_category: 5,
+        city_name: 'Chennai',
+        state_name: 'Tamil Nadu',
+        image_name: 'leela_chennai.jpg',
+        room_type: 'Palace Room',
+        max_adult: 2,
+        total_rooms: 326,
+        old_price: 20000,
+        price: 16000,
+        currency: 'INR',
+        rate_name: 'Palace Package',
+        booking_type: 'Premium',
+        extra_beds: 1,
+        max_occupancy: 3,
+        amenities: 'Gym,Swimming Pool,Wifi,Spa,Bar',
+        inclusion_names: 'Breakfast,Dinner,Airport Transfer,Welcome Drink'
+      },
+      {
+        property_id: 10,
+        property_name: 'Fairmont Jaipur',
+        star_category: 5,
+        city_name: 'Jaipur',
+        state_name: 'Rajasthan',
+        image_name: 'fairmont_jaipur.jpg',
+        room_type: 'Royal Room',
+        max_adult: 2,
+        total_rooms: 245,
+        old_price: 24000,
+        price: 19000,
+        currency: 'INR',
+        rate_name: 'Royal Package',
+        booking_type: 'Premium',
+        extra_beds: 1,
+        max_occupancy: 3,
+        amenities: 'Gym,Swimming Pool,Wifi,Spa,Bar,Conference Hall',
+        inclusion_names: 'Breakfast,Dinner,Cultural Show,Airport Transfer'
+      }
+    ];
 
-    FROM property p
-    LEFT JOIN property_photos pp ON pp.property_id = p.property_id
-    LEFT JOIN city c ON c.city_id = p.city_id
-    LEFT JOIN state s ON s.state_id = p.state_id
-    LEFT JOIN rooms r ON r.property_id = p.property_id
-    LEFT JOIN rate_plan rp ON rp.property_id = p.property_id AND rp.room_id = r.room_id
-    LEFT JOIN property_facilities pf ON pf.property_id = p.property_id
-    LEFT JOIN facilities f ON f.facility_id = pf.facility_id
-    LEFT JOIN property_inclusions pi ON pi.property_id = p.property_id
-    LEFT JOIN inclusions i ON i.inclusion_id = pi.inclusion_id
+    // Filter based on search term (case insensitive)
+    const searchTermLower = search_term.toLowerCase();
+    const filteredHotels = mockHotels.filter(hotel => 
+      hotel.property_name.toLowerCase().includes(searchTermLower) ||
+      hotel.city_name.toLowerCase().includes(searchTermLower) ||
+      hotel.state_name.toLowerCase().includes(searchTermLower)
+    );
 
-    WHERE p.property_name LIKE ?
-       OR c.city_name LIKE ?
-       OR s.state_name LIKE ?
-    GROUP BY p.property_id
-    ORDER BY search_priority, p.property_name
-    LIMIT 20;
-  `, [search_term, search_term, search_term, search_term, search_term, search_term, `%${search_term}%`, `%${search_term}%`, `%${search_term}%`]);
+    // Sort by relevance - exact property name matches first, then city matches, then state matches
+    filteredHotels.sort((a, b) => {
+      const aNameMatch = a.property_name.toLowerCase().includes(searchTermLower) ? 1 : 0;
+      const bNameMatch = b.property_name.toLowerCase().includes(searchTermLower) ? 1 : 0;
+      const aCityMatch = a.city_name.toLowerCase().includes(searchTermLower) ? 1 : 0;
+      const bCityMatch = b.city_name.toLowerCase().includes(searchTermLower) ? 1 : 0;
+      
+      if (aNameMatch !== bNameMatch) return bNameMatch - aNameMatch;
+      if (aCityMatch !== bCityMatch) return bCityMatch - aCityMatch;
+      return a.property_name.localeCompare(b.property_name);
+    });
 
-  return rows;
+    const result = filteredHotels.slice(0, 20);
+    console.log("DAO: Mock search result rows count:", result.length);
+    return result;
+    
+  } catch (error) {
+    console.error("DAO Error in searchByPropertyName:", error);
+    throw error;
+  }
 };
 
 exports.searchHotelsByOffers = async (offer) => {
