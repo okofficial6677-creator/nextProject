@@ -28,6 +28,10 @@ export default function SearchOptions({
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const debouncedSearchTerm = useDebounce(destinationInput, 500); // 500ms debounce
 
+  // Recommended searches state
+  const [recommendedSearches, setRecommendedSearches] = useState([]);
+  const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(false);
+
   // Static data for popular searches (keeping this for fallback)
   const popularSearches = ['Delhi', 'Mumbai', 'Bengaluru', 'Goa', 'Chennai'];
 
@@ -146,6 +150,24 @@ export default function SearchOptions({
 
     fetchSuggestions();
   }, [debouncedSearchTerm]);
+
+  // Fetch recommended searches on component mount
+  useEffect(() => {
+    const fetchRecommendedSearches = async () => {
+      setIsLoadingRecommendations(true);
+      try {
+        const recommendations = await searchApi.getRecommendedSearches(6);
+        setRecommendedSearches(recommendations);
+      } catch (error) {
+        console.error('Error fetching recommended searches:', error);
+        setRecommendedSearches([]);
+      } finally {
+        setIsLoadingRecommendations(false);
+      }
+    };
+
+    fetchRecommendedSearches();
+  }, []);
 
   // Close card when clicking outside
   useEffect(() => {
@@ -283,14 +305,93 @@ export default function SearchOptions({
               )}
             </div>
             <div style={{borderTop: '1px solid #eee', margin: '12px 0'}}></div>
-            <div style={{fontWeight: 500, marginBottom: 8, color: '#000'}}>Popular searches</div>
+            
+            {/* Recommended Searches Section */}
+            <div style={{fontWeight: 500, marginBottom: 8, color: '#000', display: 'flex', alignItems: 'center', gap: 8}}>
+              <span>Recommended for you</span>
+              {isLoadingRecommendations && (
+                <div style={{
+                  width: 12, 
+                  height: 12, 
+                  border: '2px solid #ddd', 
+                  borderTop: '2px solid #007bff', 
+                  borderRadius: '50%', 
+                  animation: 'spin 1s linear infinite'
+                }}></div>
+              )}
+            </div>
+            
             <div>
-              {popularSearches.map((city, i) => (
-                <div key={i} style={{display: 'flex', alignItems: 'center', padding: '6px 0', cursor: 'pointer', color: '#000'}} onClick={() => handleSelectDestination(city)}>
-                  <Image src="/images/goto.svg" alt="search" width={18} height={18} style={{marginRight: 8}} />
-                  <span style={{color: '#000'}}>{city}</span>
-                </div>
-              ))}
+              {recommendedSearches.length > 0 ? (
+                recommendedSearches.map((recommendation, i) => (
+                  <div 
+                    key={i} 
+                    style={{
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'space-between',
+                      padding: '8px 0', 
+                      cursor: 'pointer', 
+                      color: '#000',
+                      borderRadius: 4,
+                      transition: 'background-color 0.2s'
+                    }} 
+                    onClick={() => handleSelectDestination(recommendation.keyword)}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f5f5f5'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                  >
+                    <div style={{display: 'flex', alignItems: 'center'}}>
+                      <Image 
+                        src={
+                          recommendation.type === 'trending' ? '/images/trending.svg' :
+                          recommendation.type === 'popular' ? '/images/fire.svg' : 
+                          '/images/goto.svg'
+                        } 
+                        alt="search" 
+                        width={18} 
+                        height={18} 
+                        style={{marginRight: 8}} 
+                      />
+                      <span style={{color: '#000', fontWeight: 500}}>{recommendation.keyword}</span>
+                    </div>
+                    <div style={{fontSize: 11, color: '#666', display: 'flex', alignItems: 'center', gap: 4}}>
+                      {recommendation.type === 'trending' && (
+                        <span style={{
+                          background: 'linear-gradient(135deg, #ff6b6b, #ee5a24)', 
+                          color: 'white', 
+                          padding: '2px 6px', 
+                          borderRadius: 8, 
+                          fontSize: 10
+                        }}>
+                          🔥 TRENDING
+                        </span>
+                      )}
+                      {recommendation.type === 'popular' && (
+                        <span style={{
+                          background: 'linear-gradient(135deg, #3742fa, #5f27cd)', 
+                          color: 'white', 
+                          padding: '2px 6px', 
+                          borderRadius: 8, 
+                          fontSize: 10
+                        }}>
+                          ⭐ POPULAR
+                        </span>
+                      )}
+                      {recommendation.type === 'destination' && (
+                        <span style={{color: '#888', fontSize: 10}}>{recommendation.description}</span>
+                      )}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                // Fallback to static popular searches
+                popularSearches.map((city, i) => (
+                  <div key={i} style={{display: 'flex', alignItems: 'center', padding: '6px 0', cursor: 'pointer', color: '#000'}} onClick={() => handleSelectDestination(city)}>
+                    <Image src="/images/goto.svg" alt="search" width={18} height={18} style={{marginRight: 8}} />
+                    <span style={{color: '#000'}}>{city}</span>
+                  </div>
+                ))
+              )}
             </div>
             {destinationError && (
               <div style={{ color: 'red', margin: '8px 0', fontWeight: 500, fontSize: 14 }}>{destinationError}</div>

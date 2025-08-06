@@ -14,4 +14,8 @@ router.get("/isInclusionPresent/:inclusion_name", propertyController.isInclusion
 
 router.get("/PropertyById/:property_id", propertyController.getPropertyById);
 
+// 🎯 Recommended Search Routes
+router.get("/recommendations", propertyController.getRecommendedSearches);
+router.get("/analytics", propertyController.getSearchAnalytics);
+
 module.exports = router;

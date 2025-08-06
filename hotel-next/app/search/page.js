@@ -7,6 +7,7 @@ import SearchOptions from "@/components/SearchOptions/SearchOptions"
 import FilterSidebar from "./FilterSidebar"
 import HotelList from "./HotelList"
 import { useSearchParams, useRouter } from "next/navigation"
+import { searchApi } from "@/lib/searchApi"
 
 const sortOptions = [
   { label: "Recommended", value: "recommended" },
@@ -84,6 +85,8 @@ function formatHotel(hotel, index = 0) {
 export default function SearchPage() {
   const [hotels, setHotels] = useState([])
   const [searchedHotels, setSearchedHotels] = useState([])
+  const [recommendedSearches, setRecommendedSearches] = useState([])
+  const [showRecommendedSection, setShowRecommendedSection] = useState(true)
   const searchParams = useSearchParams()
   const router = useRouter()
 
@@ -138,6 +141,21 @@ export default function SearchPage() {
     fetchData()
   }, [sort, destination])
 
+  // Fetch recommended searches
+  useEffect(() => {
+    const fetchRecommendedSearches = async () => {
+      try {
+        const recommendations = await searchApi.getRecommendedSearches(8);
+        setRecommendedSearches(recommendations);
+      } catch (error) {
+        console.error('Error fetching recommended searches:', error);
+        setRecommendedSearches([]);
+      }
+    };
+
+    fetchRecommendedSearches();
+  }, [])
+
   const handleSortChange = (value) => {
     setSort(value)
     const params = new URLSearchParams(searchParams.toString())
@@ -163,6 +181,12 @@ export default function SearchPage() {
     setSearchedHotels(hotelsToShow)
   }, [])
 
+  const handleRecommendedSearch = useCallback((keyword) => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set("destination", keyword)
+    router.push(`/search?${params.toString()}`)
+  }, [searchParams, router])
+
   return (
     <>
       <CommonHeader />
@@ -175,6 +199,53 @@ export default function SearchPage() {
             onSearch={handleSearch}
           />
         </div>
+
+        {/* Recommended Searches Section */}
+        {showRecommendedSection && recommendedSearches.length > 0 && (
+          <div className={styles.recommendedSection}>
+            <div className={styles.recommendedHeader}>
+              <h3 className={styles.recommendedTitle}>
+                {destination ? `More destinations like ${destination}` : 'Recommended destinations for you'}
+              </h3>
+              <button 
+                className={styles.closeRecommended}
+                onClick={() => setShowRecommendedSection(false)}
+                title="Hide recommendations"
+              >
+                ×
+              </button>
+            </div>
+            <div className={styles.recommendedGrid}>
+              {recommendedSearches.map((recommendation, index) => (
+                <div
+                  key={index}
+                  className={styles.recommendedCard}
+                  onClick={() => handleRecommendedSearch(recommendation.keyword)}
+                >
+                  <div className={styles.recommendedCardContent}>
+                    <div className={styles.recommendedKeyword}>
+                      {recommendation.keyword}
+                    </div>
+                    <div className={styles.recommendedDescription}>
+                      {recommendation.description}
+                    </div>
+                    {recommendation.type === 'trending' && (
+                      <div className={styles.trendingBadge}>
+                        🔥 TRENDING
+                      </div>
+                    )}
+                    {recommendation.type === 'popular' && (
+                      <div className={styles.popularBadge}>
+                        ⭐ POPULAR
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className={styles.contentRow}>
           <FilterSidebar onSearchSelect={handleSearchSelect} allHotels={hotels} />
           <main className={styles.mainContent}>

@@ -25,3 +25,12 @@ exports.isInclusionPresent = async (inclusionName) => {
 exports.getPropertyById = async (property_id) => {
   return await propertyDao.getPropertyById(property_id);
 };
+
+// 🎯 Recommended Search Services
+exports.getRecommendedSearches = async (limit = 6) => {
+  return await propertyDao.getRecommendedSearches(limit);
+};
+
+exports.getSearchAnalytics = async () => {
+  return await propertyDao.getSearchAnalytics();
+};
